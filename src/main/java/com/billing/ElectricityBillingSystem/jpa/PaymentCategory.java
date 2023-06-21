@@ -22,7 +22,7 @@ public class PaymentCategory {
     Long id;
 
     @Column(name = "price")
-    int price;
+    double price;
 
 
 }
