@@ -1,5 +1,4 @@
 
-
     alter table if exists client 
        drop constraint if exists FKbjb8ev0uwm5v9q1a1uwuvavv;
 
@@ -29,10 +28,10 @@
     create table consumption (
         consumption float(53),
         day integer,
+        month integer,
         year integer,
         id bigserial not null,
         meter_id bigint,
-        month varchar(255),
         primary key (id)
     );
 
