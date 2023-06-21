@@ -1,0 +1,18 @@
+version: '3.5'
+
+services:
+  db:
+    container_name: electricity_billing
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: super_admin
+      POSTGRES_PASSWORD: SomeSecretPassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./src/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  postgres-db:
+    driver: local
