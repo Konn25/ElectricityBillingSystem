@@ -29,7 +29,7 @@ public class Consumption {
     int year;
 
     @Column(name = "month")
-    String month;
+    int month;
 
     @Column(name = "day")
     int day;
