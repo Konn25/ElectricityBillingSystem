@@ -14,9 +14,9 @@ public class PaymentDTO {
 
     Long id;
 
-    int price;
+    double price;
 
-    public PaymentDTO(int price) {
+    public PaymentDTO(double price) {
         this.price = price;
     }
 }
