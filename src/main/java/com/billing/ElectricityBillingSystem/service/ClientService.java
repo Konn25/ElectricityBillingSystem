@@ -29,9 +29,10 @@ public class ClientService implements ClientServiceInterface {
     }
 
     @Override
-    public Meter getClientMeter(Long clientId) {
+    public Meter getClientMeter(Long client_id) {
 
-        Optional<Meter> clientMeter = meterRepository.findMeterByCustomerId(clientId);
+
+        Optional<Meter> clientMeter = meterRepository.findMeterByClientId(client_id);
 
         return clientMeter.orElse(null);
     }

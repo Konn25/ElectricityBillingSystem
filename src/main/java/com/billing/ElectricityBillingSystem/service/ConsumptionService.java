@@ -32,6 +32,7 @@ public class ConsumptionService implements ConsumptionServiceInterface {
     @Override
     public List<Consumption> getConsumptionByYear(Long meterId, int year) {
         return consumptionRepository.findConsumptionByMeterIdAndYear(meterId, year);
+
     }
 
     @Override
@@ -45,6 +46,7 @@ public class ConsumptionService implements ConsumptionServiceInterface {
         }
 
         return allConsumption;
+
     }
 
     @Override

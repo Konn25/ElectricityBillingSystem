@@ -14,9 +14,9 @@ public class MeterDTO {
 
     Long id;
 
-    Long customerId;
+    Long clientId;
 
-    public MeterDTO(Long customerId) {
-        this.customerId = customerId;
+    public MeterDTO(Long clientId) {
+        this.clientId = clientId;
     }
 }

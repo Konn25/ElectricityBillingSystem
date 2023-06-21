@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -20,9 +19,7 @@ public class Consumption {
     @Column(name = "id", nullable = false)
     Long id;
 
-    @ManyToOne(targetEntity = Meter.class, fetch=FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JoinColumn(name = "meterId", referencedColumnName = "id")
-    @NotNull
+    @Column(name = "meterId", nullable = false)
     Long meterId;
 
     @Column(name = "year")

@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface MeterRepository extends JpaRepository<Meter,Long> {
-
-    Optional<Meter> findMeterByCustomerId(Long clientId);
+    Optional<Meter> findMeterByClientId(Long clientId);
 
 }

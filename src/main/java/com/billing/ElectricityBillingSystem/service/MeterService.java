@@ -13,11 +13,8 @@ public class MeterService implements MeterServiceInterface{
 
 
     @Override
-    public Meter createNewMeter(Long customerId) {
-        Meter newMeter = new Meter();
-
-        newMeter.setCustomerId(customerId);
-
+    public Meter createNewMeter(Long clientid) {
+        Meter newMeter = new Meter(clientid);
         return meterRepository.save(newMeter);
     }
 }

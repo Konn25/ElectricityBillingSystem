@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface ConsumptionRepository extends JpaRepository<Consumption,Long> {
 
 
+
     Optional<Consumption> findConsumptionByMeterIdAndYearAndMonth(Long meterId, int year, int month);
 
     List<Consumption> findConsumptionByMeterIdAndYear(Long meterId, int year);

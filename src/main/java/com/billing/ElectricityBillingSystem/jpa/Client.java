@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -20,13 +19,13 @@ public class Client {
     @Column(name = "id", nullable = false)
     Long id;
 
-    @Column(name = "customer_name", nullable = false)
+    @Column(name = "customerName", nullable = false)
     String name;
 
     @Column(name = "meterId", nullable = false)
     Long meterId;
 
-    @Column(name="postal_code",nullable = false)
+    @Column(name="postalCode",nullable = false)
     int postalCode;
 
     @Column(name="city",nullable = false)
@@ -38,9 +37,7 @@ public class Client {
     @Column(name="number",nullable = false)
     int houseNumber;
 
-    @ManyToOne(targetEntity = PaymentCategory.class, fetch=FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JoinColumn(name = "categoryId", referencedColumnName = "id")
-    @NotNull
+    @Column(name = "categoryId", nullable = false)
     int paymentCategoryId;
 
 }

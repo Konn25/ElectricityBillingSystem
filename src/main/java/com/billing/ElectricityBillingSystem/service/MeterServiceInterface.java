@@ -4,6 +4,6 @@ import com.billing.ElectricityBillingSystem.jpa.Meter;
 
 public interface MeterServiceInterface {
 
-    Meter createNewMeter(Long customerId);
+    Meter createNewMeter(Long clientId);
 
 }
