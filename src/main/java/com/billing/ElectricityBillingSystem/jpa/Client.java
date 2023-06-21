@@ -20,14 +20,23 @@ public class Client {
     @Column(name = "id", nullable = false)
     Long id;
 
-    @Column(name = "customername", nullable = false)
+    @Column(name = "customer_name", nullable = false)
     String name;
 
     @Column(name = "meterId", nullable = false)
     Long meterId;
 
-    @Column(name = "address", nullable = false)
-    String address;
+    @Column(name="postal_code",nullable = false)
+    int postalCode;
+
+    @Column(name="city",nullable = false)
+    String city;
+
+    @Column(name="street",nullable = false)
+    String street;
+
+    @Column(name="number",nullable = false)
+    int houseNumber;
 
     @ManyToOne(targetEntity = PaymentCategory.class, fetch=FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "categoryId", referencedColumnName = "id")
