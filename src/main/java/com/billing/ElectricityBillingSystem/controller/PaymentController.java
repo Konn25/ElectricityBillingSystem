@@ -22,7 +22,7 @@ public class PaymentController {
 
     @PostMapping("/paymentcategory/registration")
     @ResponseBody
-    public ResponseEntity<?> registerNewAdmin(@RequestBody PaymentDTO paymentDTO) {
+    public ResponseEntity<?> registerNewCategory(@RequestBody PaymentDTO paymentDTO) {
 
         PaymentCategory paymentCategory = modelMapper.map(paymentDTO, PaymentCategory.class);
 
@@ -45,6 +45,21 @@ public class PaymentController {
     @ResponseBody
     public List<PaymentCategory> getAllPaymentCategory(){
         return paymentService.getAllPaymentCategory();
+    }
+
+    @GetMapping("/paymentcategory/payment/{clientId}/{year}/{month}")
+    @ResponseBody
+    public ResponseEntity<?> getActualPayment(@PathVariable(value = "clientId") Long clientId, @PathVariable(value = "year") int year, @PathVariable(value = "month") int month){
+
+       double actualPayment = paymentService.calculatePaymentByPaymentCategory(clientId,year,month);
+
+       if(actualPayment!=0.0){
+           return  ResponseEntity.status(HttpStatus.OK).body("Price: "+actualPayment);
+       }
+
+       return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong! Please check the year and month or add new consumption.");
+
+
     }
 
 }
