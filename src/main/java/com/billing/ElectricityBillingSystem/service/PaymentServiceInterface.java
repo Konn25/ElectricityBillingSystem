@@ -11,4 +11,6 @@ public interface PaymentServiceInterface {
 
     List<PaymentCategory> getAllPaymentCategory();
 
+    Double calculatePaymentByPaymentCategory(Long clientId, int year, int month);
+
 }
