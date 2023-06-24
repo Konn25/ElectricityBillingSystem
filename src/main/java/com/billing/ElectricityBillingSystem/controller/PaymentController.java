@@ -1,7 +1,10 @@
 package com.billing.ElectricityBillingSystem.controller;
 
+
 import com.billing.ElectricityBillingSystem.dto.PaymentDTO;
-import com.billing.ElectricityBillingSystem.jpa.PaymentCategory;
+import com.billing.ElectricityBillingSystem.jpa.ClientRepository;
+import com.billing.ElectricityBillingSystem.jpa.Payment;
+import com.billing.ElectricityBillingSystem.jpa.PaymentRepository;
 import com.billing.ElectricityBillingSystem.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1")
@@ -20,46 +24,52 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @PostMapping("/paymentcategory/registration")
+    private final PaymentRepository paymentRepository;
+
+
+    @PostMapping("/payment/register")
     @ResponseBody
-    public ResponseEntity<?> registerNewCategory(@RequestBody PaymentDTO paymentDTO) {
+    public ResponseEntity<?> registerNewPayment(@RequestBody PaymentDTO paymentDTO){
 
-        PaymentCategory paymentCategory = modelMapper.map(paymentDTO, PaymentCategory.class);
+        Payment payment = modelMapper.map(paymentDTO, Payment.class);
 
-        List<PaymentCategory> paymentCategoryList = paymentService.getAllPaymentCategory();
+        List<Payment> paymentCategoryList = paymentService.getAllBill();
 
-        for (PaymentCategory value : paymentCategoryList) {
-            if(value.getPrice() == paymentCategory.getPrice()){
-                return  ResponseEntity.status(HttpStatus.CONFLICT).body("This price is already registered");
+        for (Payment x:paymentCategoryList) {
+            if(x.getClientId().equals(paymentDTO.getClientId()) && x.getYear() == paymentDTO.getYear() && x.getMonth() == paymentDTO.getMonth()){
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("This payment is already registered!");
             }
         }
 
-        PaymentCategory newPaymentCategory = paymentService.createNewPaymentCategory(paymentCategory.getPrice());
+        Payment newPayment = paymentService.createNewPayment(payment);
 
-        PaymentDTO paymentResponse = modelMapper.map(newPaymentCategory,PaymentDTO.class);
+        PaymentDTO paymentResponse = modelMapper.map(newPayment, PaymentDTO.class);
 
         return new ResponseEntity<>(paymentResponse, HttpStatus.CREATED);
     }
 
-    @GetMapping("/paymentcategory/all")
+    @GetMapping("/payment/all/{clientId}")
     @ResponseBody
-    public List<PaymentCategory> getAllPaymentCategory(){
-        return paymentService.getAllPaymentCategory();
+    public Optional<Payment> getClientAllPayment(@PathVariable(value = "clientId") Long clientId){
+        return paymentService.getClientAllPayment(clientId);
     }
 
-    @GetMapping("/paymentcategory/payment/{clientId}/{year}/{month}")
+    @PostMapping("/payment/paying/{clientId}/{paymentId}")
     @ResponseBody
-    public ResponseEntity<?> getActualPayment(@PathVariable(value = "clientId") Long clientId, @PathVariable(value = "year") int year, @PathVariable(value = "month") int month){
+    public Payment clientPayingBill(@PathVariable(value = "clientId") Long clientId, @PathVariable(value = "paymentId") Long paymentId){
+        return paymentService.clientPayingBill(clientId,paymentId);
+    }
 
-       double actualPayment = paymentService.calculatePaymentByPaymentCategory(clientId,year,month);
+    @GetMapping("/payment/bill/paid/{clientId}")
+    @ResponseBody
+    public List<Payment> getClientAllPaidBill(@PathVariable(value = "clientId") Long clientId){
+        return paymentService.getClientAllPaidBill(clientId);
+    }
 
-       if(actualPayment!=0.0){
-           return  ResponseEntity.status(HttpStatus.OK).body("Price: "+actualPayment);
-       }
-
-       return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong! Please check the year and month or add new consumption.");
-
-
+    @GetMapping("/payment/bill/notpaid/{clientId}")
+    @ResponseBody
+    public List<Payment> getClientAllNotPaidBill(@PathVariable(value = "clientId") Long clientId){
+        return paymentService.getClientAllNotPaidBill(clientId);
     }
 
 }

@@ -24,10 +24,10 @@ public class ConsumptionController {
     private final ConsumptionService consumptionService;
 
 
-    @GetMapping("/consumptions/{clientId}")
+    @GetMapping("/consumptions/{meterId}")
     @ResponseBody
-    public List<Consumption> getAllConsumption(@PathParam(value = "clientId") Long clientId) {
-        return consumptionService.getAllConsumption(clientId);
+    public Optional<Consumption> getAllConsumption(@PathParam(value = "meterId") Long meterId) {
+        return consumptionService.getAllConsumption(meterId);
     }
 
 
@@ -75,16 +75,16 @@ public class ConsumptionController {
     }
 
 
-    @GetMapping("/consumption/{clientId}/{year}")
+    @GetMapping("/consumption/{meterId}/{year}")
     @ResponseBody
-    public List<Consumption> getConsumptionByYear(@PathVariable(value = "clientId") Long meterId, @PathVariable(value = "year") int year){
+    public List<Consumption> getConsumptionByYear(@PathVariable(value = "meterId") Long meterId, @PathVariable(value = "year") int year){
         return consumptionService.getConsumptionByYear(meterId, year);
     }
 
 
-    @GetMapping("/consumption/allconsumption/{clientId}/{year}")
+    @GetMapping("/consumption/allconsumption/{meterId}/{year}")
     @ResponseBody
-    public ResponseEntity<String> getAllConsumptionByYear(@PathVariable(value = "clientId") Long meterId, @PathVariable(value = "year") int year){
+    public ResponseEntity<String> getAllConsumptionByYear(@PathVariable(value = "meterId") Long meterId, @PathVariable(value = "year") int year){
 
         double allConsumption = consumptionService.getAllConsumptionByYear(meterId, year);
 

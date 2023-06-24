@@ -15,8 +15,8 @@ public class ConsumptionService implements ConsumptionServiceInterface {
     private final ConsumptionRepository consumptionRepository;
 
     @Override
-    public List<Consumption> getAllConsumption(Long meterId) {
-        return consumptionRepository.findAll();
+    public Optional<Consumption> getAllConsumption(Long meterId) {
+        return consumptionRepository.findConsumptionByMeterId(meterId);
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ConsumptionServiceInterface {
 
-    List<Consumption> getAllConsumption(Long meterId);
+    Optional<Consumption> getAllConsumption(Long meterId);
 
     Optional<Consumption> checkConsumption(Consumption consumption);
 

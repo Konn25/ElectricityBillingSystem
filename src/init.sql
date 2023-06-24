@@ -5,6 +5,8 @@
 
     drop table if exists meters cascade;
 
+    drop table if exists payment cascade;
+
     drop table if exists payment_category cascade;
 
     create table client (
@@ -30,6 +32,16 @@
     );
 
     create table meters (
+        client_id bigint not null,
+        id bigserial not null,
+        primary key (id)
+    );
+
+    create table payment (
+        completed integer,
+        month integer not null,
+        payment float(53) not null,
+        year integer not null,
         client_id bigint not null,
         id bigserial not null,
         primary key (id)
