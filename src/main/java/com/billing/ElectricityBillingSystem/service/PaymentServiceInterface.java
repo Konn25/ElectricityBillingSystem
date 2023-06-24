@@ -1,16 +1,23 @@
 package com.billing.ElectricityBillingSystem.service;
 
-import com.billing.ElectricityBillingSystem.jpa.Consumption;
-import com.billing.ElectricityBillingSystem.jpa.PaymentCategory;
+import com.billing.ElectricityBillingSystem.jpa.Payment;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PaymentServiceInterface {
 
-    PaymentCategory createNewPaymentCategory(double price);
 
-    List<PaymentCategory> getAllPaymentCategory();
+    Payment createNewPayment(Payment payment);
 
-    Double calculatePaymentByPaymentCategory(Long clientId, int year, int month);
+    Optional<Payment> getClientAllPayment(Long clientId);
+
+    Payment clientPayingBill(Long clientId, Long paymentId);
+
+    List<Payment> getClientAllPaidBill(Long clientId);
+
+    List<Payment> getClientAllNotPaidBill(Long clientId);
+
+    List<Payment> getAllBill();
 
 }

@@ -1,6 +1,8 @@
 package com.billing.ElectricityBillingSystem.service;
 
-import com.billing.ElectricityBillingSystem.jpa.*;
+import com.billing.ElectricityBillingSystem.jpa.Consumption;
+import com.billing.ElectricityBillingSystem.jpa.Payment;
+import com.billing.ElectricityBillingSystem.jpa.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,45 +11,54 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentService implements PaymentServiceInterface {
+public class PaymentService implements PaymentServiceInterface{
 
-    private final PaymentCategoryRepository paymentCategoryRepository;
 
-    private final ClientRepository clientRepository;
+    private final PaymentRepository paymentRepository;
 
-    private final ConsumptionRepository consumptionRepository;
 
     @Override
-    public PaymentCategory createNewPaymentCategory(double price) {
-
-        PaymentCategory paymentCategory = new PaymentCategory();
-        paymentCategory.setPrice(price);
-
-        return paymentCategoryRepository.save(paymentCategory);
+    public Payment createNewPayment(Payment payment) {
+        return paymentRepository.save(payment);
     }
 
     @Override
-    public List<PaymentCategory> getAllPaymentCategory() {
-        return paymentCategoryRepository.findAll();
+    public Optional<Payment> getClientAllPayment(Long clientId) {
+        return paymentRepository.findPaymentByClientId(clientId);
     }
 
     @Override
-    public Double calculatePaymentByPaymentCategory(Long clientId, int year, int month) {
+    public Payment clientPayingBill(Long clientId, Long paymentId) {
 
-        double paymentCost = 0.0;
+        Optional<Payment> findPayment = paymentRepository.findPaymentByClientId(clientId);
 
-        Optional<Client> findClient = clientRepository.findClientById(clientId);
-        Optional<PaymentCategory> findPaymentCategory = paymentCategoryRepository.findPaymentCategoryById((long) findClient.get().getPaymentCategoryId());
-        Optional<Consumption> findConsumption = consumptionRepository.findConsumptionByMeterIdAndYearAndMonth(findClient.get().getMeterId(), year, month);
-
-
-        if (findConsumption.isPresent() && findClient.isPresent() && findPaymentCategory.isPresent()) {
-            if (findClient.get().getPaymentCategoryId() == findPaymentCategory.get().getId()) {
-                paymentCost = findConsumption.get().getConsumption() * findPaymentCategory.get().getPrice();
-            }
+        if(findPayment.get().getId().equals(paymentId)){
+            Payment payment = findPayment.get();
+            payment.setCompleted(1);
+            return paymentRepository.save(payment);
         }
 
+        return null;
+    }
 
-        return paymentCost;
+    @Override
+    public List<Payment> getClientAllPaidBill(Long clientId) {
+
+        Optional<Payment> findPayment = paymentRepository.findPaymentByClientId(clientId);
+
+        return findPayment.stream().filter(v ->v.getCompleted() == 1).toList();
+    }
+
+    @Override
+    public List<Payment> getClientAllNotPaidBill(Long clientId) {
+
+        Optional<Payment> findPayment = paymentRepository.findPaymentByClientId(clientId);
+
+        return findPayment.stream().filter(v ->v.getCompleted() == 0).toList();
+    }
+
+    @Override
+    public List<Payment> getAllBill() {
+        return paymentRepository.findAll();
     }
 }

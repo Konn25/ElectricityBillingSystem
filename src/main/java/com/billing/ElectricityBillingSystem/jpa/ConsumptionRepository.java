@@ -15,4 +15,8 @@ public interface ConsumptionRepository extends JpaRepository<Consumption,Long> {
 
     List<Consumption> findConsumptionByMeterIdAndYear(Long meterId, int year);
 
+    Optional<Consumption> findConsumptionByMeterId(Long meterId);
+
+
+
 }
