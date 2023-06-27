@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentService implements PaymentServiceInterface{
+public class PaymentService implements PaymentServiceInterface {
 
 
     private final PaymentRepository paymentRepository;
@@ -23,8 +23,8 @@ public class PaymentService implements PaymentServiceInterface{
     }
 
     @Override
-    public Optional<Payment> getClientAllPayment(Long clientId) {
-        return paymentRepository.findPaymentByClientId(clientId);
+    public List<Payment> getClientAllPayment(Long clientId) {
+        return paymentRepository.findPaymentsByClientId(clientId);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class PaymentService implements PaymentServiceInterface{
 
         Optional<Payment> findPayment = paymentRepository.findPaymentByClientId(clientId);
 
-        if(findPayment.get().getId().equals(paymentId)){
+        if (findPayment.get().getId().equals(paymentId)) {
             Payment payment = findPayment.get();
             payment.setCompleted(1);
             return paymentRepository.save(payment);
@@ -44,17 +44,17 @@ public class PaymentService implements PaymentServiceInterface{
     @Override
     public List<Payment> getClientAllPaidBill(Long clientId) {
 
-        Optional<Payment> findPayment = paymentRepository.findPaymentByClientId(clientId);
+        List<Payment> findPayment = paymentRepository.findPaymentsByClientId(clientId);
 
-        return findPayment.stream().filter(v ->v.getCompleted() == 1).toList();
+        return findPayment.stream().filter(v -> v.getCompleted() == 1).toList();
     }
 
     @Override
     public List<Payment> getClientAllNotPaidBill(Long clientId) {
 
-        Optional<Payment> findPayment = paymentRepository.findPaymentByClientId(clientId);
+        List<Payment> findPayment = paymentRepository.findPaymentsByClientId(clientId);
 
-        return findPayment.stream().filter(v ->v.getCompleted() == 0).toList();
+        return findPayment.stream().filter(v -> v.getCompleted() == 0).toList();
     }
 
     @Override
