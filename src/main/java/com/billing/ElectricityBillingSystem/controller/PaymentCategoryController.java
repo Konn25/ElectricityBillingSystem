@@ -2,7 +2,7 @@ package com.billing.ElectricityBillingSystem.controller;
 
 import com.billing.ElectricityBillingSystem.dto.PaymentCategoryDTO;
 import com.billing.ElectricityBillingSystem.jpa.PaymentCategory;
-import com.billing.ElectricityBillingSystem.service.PaymentCategoryCategoryService;
+import com.billing.ElectricityBillingSystem.service.PaymentCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ public class PaymentCategoryController {
 
     private final ModelMapper modelMapper;
 
-    private final PaymentCategoryCategoryService paymentCategoryService;
+    private final PaymentCategoryService paymentCategoryService;
 
     @PostMapping("/paymentcategory/registration")
     @ResponseBody
@@ -29,8 +29,8 @@ public class PaymentCategoryController {
         List<PaymentCategory> paymentCategoryList = paymentCategoryService.getAllPaymentCategory();
 
         for (PaymentCategory value : paymentCategoryList) {
-            if(value.getPrice() == paymentCategory.getPrice()){
-                return  ResponseEntity.status(HttpStatus.CONFLICT).body("This price is already registered");
+            if (value.getPrice() == paymentCategory.getPrice()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("This price is already registered");
             }
         }
 
@@ -43,21 +43,21 @@ public class PaymentCategoryController {
 
     @GetMapping("/paymentcategory/all")
     @ResponseBody
-    public List<PaymentCategory> getAllPaymentCategory(){
+    public List<PaymentCategory> getAllPaymentCategory() {
         return paymentCategoryService.getAllPaymentCategory();
     }
 
     @GetMapping("/paymentcategory/payment/{clientId}/{year}/{month}")
     @ResponseBody
-    public ResponseEntity<?> getActualPayment(@PathVariable(value = "clientId") Long clientId, @PathVariable(value = "year") int year, @PathVariable(value = "month") int month){
+    public ResponseEntity<?> getActualPayment(@PathVariable(value = "clientId") Long clientId, @PathVariable(value = "year") int year, @PathVariable(value = "month") int month) {
 
-       double actualPayment = paymentCategoryService.calculatePaymentByPaymentCategory(clientId,year,month);
+        double actualPayment = paymentCategoryService.calculatePaymentByPaymentCategory(clientId, year, month);
 
-       if(actualPayment!=0.0){
-           return  ResponseEntity.status(HttpStatus.OK).body("Price: "+actualPayment);
-       }
+        if (actualPayment != 0.0) {
+            return ResponseEntity.status(HttpStatus.OK).body("Price: " + actualPayment);
+        }
 
-       return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong! Please check the year and month or add new consumption.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong! Please check the year and month or add new consumption.");
 
 
     }
