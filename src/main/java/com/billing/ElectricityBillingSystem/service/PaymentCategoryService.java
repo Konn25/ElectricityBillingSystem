@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentCategoryCategoryService implements PaymentCategoryServiceInterface {
+public class PaymentCategoryService implements PaymentCategoryServiceInterface {
 
     private final PaymentCategoryRepository paymentCategoryRepository;
 

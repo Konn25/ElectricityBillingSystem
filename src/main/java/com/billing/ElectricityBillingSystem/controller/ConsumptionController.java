@@ -1,8 +1,12 @@
 package com.billing.ElectricityBillingSystem.controller;
 
 import com.billing.ElectricityBillingSystem.dto.ConsumptionDTO;
+import com.billing.ElectricityBillingSystem.dto.PaymentDTO;
 import com.billing.ElectricityBillingSystem.jpa.Consumption;
+import com.billing.ElectricityBillingSystem.jpa.Payment;
 import com.billing.ElectricityBillingSystem.service.ConsumptionService;
+import com.billing.ElectricityBillingSystem.service.PaymentCategoryService;
+import com.billing.ElectricityBillingSystem.service.PaymentService;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,6 +27,10 @@ public class ConsumptionController {
 
     private final ConsumptionService consumptionService;
 
+    private final PaymentService paymentService;
+
+    private final PaymentCategoryService paymentCategoryService;
+
 
     @GetMapping("/consumptions/{meterId}")
     @ResponseBody
@@ -34,13 +42,13 @@ public class ConsumptionController {
     @GetMapping("/consumption/{meterId}/{year}/{month}")
     @ResponseBody
     public ResponseEntity<String> checkConsumptionByYearAndMonth(@PathVariable(value = "meterId") Long meterId,
-                                              @PathVariable(value = "year") int year,
-                                              @PathVariable(value = "month") int month) {
+                                                                 @PathVariable(value = "year") int year,
+                                                                 @PathVariable(value = "month") int month) {
 
         Optional<Consumption> consumption = consumptionService.getConsumptionByYearAndMonth(meterId, year, month);
 
         if (consumption.isPresent()) {
-            Map<String,?> map = Map.of(
+            Map<String, ?> map = Map.of(
                     "year", consumption.get().getYear(),
                     "day", consumption.get().getDay(),
                     "month", consumption.get().getMonth(),
@@ -49,27 +57,29 @@ public class ConsumptionController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(String.valueOf(map));
         } else {
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Year or month not found or data missing!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Year or month not found or data missing!");
         }
 
     }
 
 
-    @PostMapping("/consumption/create")
+    @PostMapping("/consumption/{clientId}/create")
     @ResponseBody
-    public ResponseEntity<String> createNewConsumption(@RequestBody ConsumptionDTO consumptionDTO){
+    public ResponseEntity<String> createNewConsumption(@PathParam(value = "clientId") Long clientId, @RequestBody ConsumptionDTO consumptionDTO) {
 
         Consumption consumptionRequest = modelMapper.map(consumptionDTO, Consumption.class);
 
         Optional<Consumption> consumptionFound = consumptionService.checkConsumption(consumptionRequest);
 
         if (consumptionFound.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This year and month has already meter reading data!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This year and month has already taken!");
         }
 
         Consumption newConsumption = consumptionService.createNewConsumption(consumptionRequest);
 
         ConsumptionDTO consumptionResponse = modelMapper.map(newConsumption, ConsumptionDTO.class);
+
+        consumptionService.createPaymentToDatabase(clientId, consumptionRequest.getYear(), consumptionResponse.getMonth());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf(consumptionResponse));
     }
@@ -77,21 +87,19 @@ public class ConsumptionController {
 
     @GetMapping("/consumption/{meterId}/{year}")
     @ResponseBody
-    public List<Consumption> getConsumptionByYear(@PathVariable(value = "meterId") Long meterId, @PathVariable(value = "year") int year){
+    public List<Consumption> getConsumptionByYear(@PathVariable(value = "meterId") Long meterId, @PathVariable(value = "year") int year) {
         return consumptionService.getConsumptionByYear(meterId, year);
     }
 
 
     @GetMapping("/consumption/allconsumption/{meterId}/{year}")
     @ResponseBody
-    public ResponseEntity<String> getAllConsumptionByYear(@PathVariable(value = "meterId") Long meterId, @PathVariable(value = "year") int year){
+    public ResponseEntity<String> getAllConsumptionByYear(@PathVariable(value = "meterId") Long meterId, @PathVariable(value = "year") int year) {
 
         double allConsumption = consumptionService.getAllConsumptionByYear(meterId, year);
 
-        return ResponseEntity.status(HttpStatus.OK).body(" "+(Map.of("year:", year, "total:", allConsumption)));
+        return ResponseEntity.status(HttpStatus.OK).body(" " + (Map.of("year:", year, "total:", allConsumption)));
     }
-
-
 
 
 }
