@@ -5,6 +5,8 @@ import com.billing.ElectricityBillingSystem.jpa.MeterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class MeterService implements MeterServiceInterface{
@@ -16,5 +18,10 @@ public class MeterService implements MeterServiceInterface{
     public Meter createNewMeter(Long clientid) {
         Meter newMeter = new Meter(clientid);
         return meterRepository.save(newMeter);
+    }
+
+    @Override
+    public Optional<Meter> findMeterByClientId(Long clientId) {
+        return meterRepository.findMeterByClientId(clientId);
     }
 }

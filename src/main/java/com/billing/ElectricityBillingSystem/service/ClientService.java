@@ -41,4 +41,14 @@ public class ClientService implements ClientServiceInterface {
     public Optional<Client> findClientById(Long clientId) {
         return clientRepository.findClientById(clientId);
     }
+
+    @Override
+    public Client setClientMeter(Client client, Long meterId) {
+
+        Client getClient = client;
+
+        getClient.setMeterId(meterId);
+
+        return clientRepository.save(getClient);
+    }
 }

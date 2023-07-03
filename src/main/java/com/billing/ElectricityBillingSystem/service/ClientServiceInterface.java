@@ -15,4 +15,6 @@ public interface ClientServiceInterface {
 
     Optional<Client> findClientById(Long clientId);
 
+    Client setClientMeter(Client client,Long meterId);
+
 }
