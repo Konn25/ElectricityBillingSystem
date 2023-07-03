@@ -4,6 +4,7 @@ import com.billing.ElectricityBillingSystem.dto.ClientDTO;
 import com.billing.ElectricityBillingSystem.jpa.Client;
 import com.billing.ElectricityBillingSystem.jpa.Meter;
 import com.billing.ElectricityBillingSystem.service.ClientService;
+import com.billing.ElectricityBillingSystem.service.MeterService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,8 @@ public class ClientController {
 
     private final ClientService clientService;
 
+    private final MeterService meterService;
+
     @PostMapping("/createclient")
     @ResponseBody
     public ResponseEntity<String> createClient(@RequestBody ClientDTO clientDTO){
@@ -42,6 +45,14 @@ public class ClientController {
         Client newClient = clientService.createClient(clientRequest);
 
         ClientDTO clientResponse = modelMapper.map(newClient, ClientDTO.class);
+
+        meterService.createNewMeter(clientResponse.getId());
+
+        Optional<Meter> findClientMeter = meterService.findMeterByClientId(clientResponse.getId());
+
+        clientService.setClientMeter(newClient,findClientMeter.get().getId());
+
+        clientService.createClient(newClient);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf(clientResponse));
     }
