@@ -7,6 +7,9 @@ import com.billing.ElectricityBillingSystem.jpa.Payment;
 import com.billing.ElectricityBillingSystem.service.ConsumptionService;
 import com.billing.ElectricityBillingSystem.service.PaymentCategoryService;
 import com.billing.ElectricityBillingSystem.service.PaymentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,26 +24,26 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
+@Tag(name = "Consumption API", description = "The Consumption API.")
 public class ConsumptionController {
 
     private final ModelMapper modelMapper;
 
     private final ConsumptionService consumptionService;
 
-    private final PaymentService paymentService;
-
-    private final PaymentCategoryService paymentCategoryService;
-
-
     @GetMapping("/consumptions/{meterId}")
     @ResponseBody
-    public Optional<Consumption> getAllConsumption(@PathParam(value = "meterId") Long meterId) {
-        return consumptionService.getAllConsumption(meterId);
+    @Operation(summary = "Get client's all consumptions by meter id", description = "Get client's all consumptions by meter id")
+    @ApiResponse(responseCode = "200", description = "Get client's all consumptions by meter id")
+    public List<Consumption> getAllConsumption(@PathParam(value = "meterId") Long meterId) {
+        return  consumptionService.getAllConsumption(meterId);
     }
 
 
     @GetMapping("/consumption/{meterId}/{year}/{month}")
     @ResponseBody
+    @Operation(summary = "Get client's consumption by meter id, year and month", description = "Get client's all consumption in a specific year and month")
+    @ApiResponse(responseCode = "200", description = "Get client's consumption by meter id, year and month")
     public ResponseEntity<String> checkConsumptionByYearAndMonth(@PathVariable(value = "meterId") Long meterId,
                                                                  @PathVariable(value = "year") int year,
                                                                  @PathVariable(value = "month") int month) {
@@ -65,6 +68,9 @@ public class ConsumptionController {
 
     @PostMapping("/consumption/{clientId}/create")
     @ResponseBody
+    @Operation(summary = "New consumption registration", description = "Add a new consumption to the database")
+    @ApiResponse(responseCode = "201", description = "New consumption created")
+    @ApiResponse(responseCode = "400", description = "Already have a reading data in this year and month")
     public ResponseEntity<String> createNewConsumption(@PathParam(value = "clientId") Long clientId, @RequestBody ConsumptionDTO consumptionDTO) {
 
         Consumption consumptionRequest = modelMapper.map(consumptionDTO, Consumption.class);
@@ -87,6 +93,8 @@ public class ConsumptionController {
 
     @GetMapping("/consumption/{meterId}/{year}")
     @ResponseBody
+    @Operation(summary = "Get client consumption by year", description = "Get client consumption by meter id and year")
+    @ApiResponse(responseCode = "200", description = "Get client consumption by year")
     public List<Consumption> getConsumptionByYear(@PathVariable(value = "meterId") Long meterId, @PathVariable(value = "year") int year) {
         return consumptionService.getConsumptionByYear(meterId, year);
     }
@@ -94,6 +102,8 @@ public class ConsumptionController {
 
     @GetMapping("/consumption/allconsumption/{meterId}/{year}")
     @ResponseBody
+    @Operation(summary = "Get total consumption by year", description = "Get total consumption by meter id and year")
+    @ApiResponse(responseCode = "200", description = "Get total consumption by year")
     public ResponseEntity<String> getAllConsumptionByYear(@PathVariable(value = "meterId") Long meterId, @PathVariable(value = "year") int year) {
 
         double allConsumption = consumptionService.getAllConsumptionByYear(meterId, year);

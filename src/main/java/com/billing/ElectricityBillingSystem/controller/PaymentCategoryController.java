@@ -3,6 +3,9 @@ package com.billing.ElectricityBillingSystem.controller;
 import com.billing.ElectricityBillingSystem.dto.PaymentCategoryDTO;
 import com.billing.ElectricityBillingSystem.jpa.PaymentCategory;
 import com.billing.ElectricityBillingSystem.service.PaymentCategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
+@Tag(name = "Payment Category API", description = "The Payment Category API.")
 public class PaymentCategoryController {
 
     private final ModelMapper modelMapper;
@@ -22,6 +26,9 @@ public class PaymentCategoryController {
 
     @PostMapping("/paymentcategory/registration")
     @ResponseBody
+    @Operation(summary = "Create new payment category", description = "Create new payment category")
+    @ApiResponse(responseCode = "201", description = "Create new payment category")
+    @ApiResponse(responseCode = "400", description = "This price already registered")
     public ResponseEntity<?> registerNewCategory(@RequestBody PaymentCategoryDTO paymentCategoryDTO) {
 
         PaymentCategory paymentCategory = modelMapper.map(paymentCategoryDTO, PaymentCategory.class);
@@ -43,12 +50,17 @@ public class PaymentCategoryController {
 
     @GetMapping("/paymentcategory/all")
     @ResponseBody
+    @Operation(summary = "Get all payment category", description = "Get all payment category")
+    @ApiResponse(responseCode = "200", description = "Get all payment category")
     public List<PaymentCategory> getAllPaymentCategory() {
         return paymentCategoryService.getAllPaymentCategory();
     }
 
     @GetMapping("/paymentcategory/payment/{clientId}/{year}/{month}")
     @ResponseBody
+    @Operation(summary = "Get client's payment category", description = "Get client's payment category")
+    @ApiResponse(responseCode = "200", description = "Get client's payment category")
+    @ApiResponse(responseCode = "400", description = "Payment id zero or something went wrong")
     public ResponseEntity<?> getActualPayment(@PathVariable(value = "clientId") Long clientId, @PathVariable(value = "year") int year, @PathVariable(value = "month") int month) {
 
         double actualPayment = paymentCategoryService.calculatePaymentByPaymentCategory(clientId, year, month);

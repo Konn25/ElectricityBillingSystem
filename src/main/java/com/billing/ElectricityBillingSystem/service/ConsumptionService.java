@@ -26,7 +26,7 @@ public class ConsumptionService implements ConsumptionServiceInterface {
     private final ModelMapper modelMapper;
 
     @Override
-    public Optional<Consumption> getAllConsumption(Long meterId) {
+    public List<Consumption> getAllConsumption(Long meterId) {
         return consumptionRepository.findConsumptionByMeterId(meterId);
     }
 
