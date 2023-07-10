@@ -1,6 +1,5 @@
 package com.billing.ElectricityBillingSystem.service;
 
-import com.billing.ElectricityBillingSystem.jpa.Consumption;
 import com.billing.ElectricityBillingSystem.jpa.Payment;
 import com.billing.ElectricityBillingSystem.jpa.PaymentRepository;
 import lombok.RequiredArgsConstructor;
