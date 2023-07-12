@@ -8,6 +8,7 @@ I use the following things:
 -  JDK Corretto-17.0.7
 -  Jacoco
 -  Gradle
+- https://github.com/kenglxn/QRGen
 
 How to run this project
 --------
