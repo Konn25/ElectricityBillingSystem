@@ -11,9 +11,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,6 +67,20 @@ public class ClientController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf(clientResponse));
     }
+
+    @GetMapping("/clientdata/{clientId}")
+    @ResponseBody
+    @Operation(summary = "Get client's data", description = "Get client's important datat")
+    @ApiResponse(responseCode = "200", description = "Get all client from database")
+    public ResponseEntity<byte[]> getQRCode(@PathVariable("clientId") Long customerID) throws IOException {
+
+        File f = clientService.generateQRCode(customerID);
+        f.deleteOnExit();
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_PNG).body(Files.readAllBytes(f.toPath()));
+    }
+
+
+
 
 
     @GetMapping("/clients")
