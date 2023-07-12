@@ -2,6 +2,7 @@ package com.billing.ElectricityBillingSystem.controller;
 
 import com.billing.ElectricityBillingSystem.dto.ClientDTO;
 import com.billing.ElectricityBillingSystem.jpa.*;
+import com.billing.ElectricityBillingSystem.qrcode.QRCodeGenerator;
 import com.billing.ElectricityBillingSystem.service.ClientService;
 import com.billing.ElectricityBillingSystem.service.MeterService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,10 +27,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,6 +72,8 @@ class ClientControllerTest {
     private ClientDTO clientDTO = new ClientDTO();
 
     private ClientDTO clientDTO2;
+
+    private QRCodeGenerator qrCodeGenerator;
 
     @BeforeEach
     public void setup() {
@@ -117,6 +122,30 @@ class ClientControllerTest {
 
     }
 
+
+    @Test
+    void getQRCode() throws Exception {
+
+        //GIVEN
+        Client client = new Client();
+        client.setId(1L);
+        client.setMeterId(1L);
+        client.setPaymentCategoryId(1);
+        client.setName("Test");
+        client.setPostalCode(1234);
+        client.setCity("Test city");
+        client.setStreet("Test street");
+        client.setHouseNumber(21);
+        this.qrCodeGenerator=new QRCodeGenerator();
+
+        given(clientRepository.findClientById(1L)).willReturn(Optional.of(client));
+
+        //WHEN
+        ResponseEntity<?> actual = clientController.getQRCode(1L);
+
+        //THEN
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+    }
 
     @Test
     void createClient_Created() {
