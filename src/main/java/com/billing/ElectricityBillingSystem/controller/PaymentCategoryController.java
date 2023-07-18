@@ -5,6 +5,7 @@ import com.billing.ElectricityBillingSystem.jpa.PaymentCategory;
 import com.billing.ElectricityBillingSystem.service.PaymentCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -50,6 +51,7 @@ public class PaymentCategoryController {
 
     @GetMapping("/paymentcategory/all")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get all payment category", description = "Get all payment category")
     @ApiResponse(responseCode = "200", description = "Get all payment category")
     public List<PaymentCategory> getAllPaymentCategory() {
@@ -58,6 +60,7 @@ public class PaymentCategoryController {
 
     @GetMapping("/paymentcategory/payment/{clientId}/{year}/{month}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get client's payment category", description = "Get client's payment category")
     @ApiResponse(responseCode = "200", description = "Get client's payment category")
     @ApiResponse(responseCode = "400", description = "Payment id zero or something went wrong")

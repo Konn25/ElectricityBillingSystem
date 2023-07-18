@@ -1,14 +1,11 @@
 package com.billing.ElectricityBillingSystem.controller;
 
 import com.billing.ElectricityBillingSystem.dto.ConsumptionDTO;
-import com.billing.ElectricityBillingSystem.dto.PaymentDTO;
 import com.billing.ElectricityBillingSystem.jpa.Consumption;
-import com.billing.ElectricityBillingSystem.jpa.Payment;
 import com.billing.ElectricityBillingSystem.service.ConsumptionService;
-import com.billing.ElectricityBillingSystem.service.PaymentCategoryService;
-import com.billing.ElectricityBillingSystem.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +30,7 @@ public class ConsumptionController {
 
     @GetMapping("/consumptions/{meterId}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get client's all consumptions by meter id", description = "Get client's all consumptions by meter id")
     @ApiResponse(responseCode = "200", description = "Get client's all consumptions by meter id")
     public List<Consumption> getAllConsumption(@PathParam(value = "meterId") Long meterId) {
@@ -42,6 +40,7 @@ public class ConsumptionController {
 
     @GetMapping("/consumption/{meterId}/{year}/{month}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get client's consumption by meter id, year and month", description = "Get client's all consumption in a specific year and month")
     @ApiResponse(responseCode = "200", description = "Get client's consumption by meter id, year and month")
     public ResponseEntity<String> checkConsumptionByYearAndMonth(@PathVariable(value = "meterId") Long meterId,
@@ -68,6 +67,7 @@ public class ConsumptionController {
 
     @PostMapping("/consumption/{clientId}/create")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "New consumption registration", description = "Add a new consumption to the database")
     @ApiResponse(responseCode = "201", description = "New consumption created")
     @ApiResponse(responseCode = "400", description = "Already have a reading data in this year and month")
@@ -93,6 +93,7 @@ public class ConsumptionController {
 
     @GetMapping("/consumption/{meterId}/{year}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get client consumption by year", description = "Get client consumption by meter id and year")
     @ApiResponse(responseCode = "200", description = "Get client consumption by year")
     public List<Consumption> getConsumptionByYear(@PathVariable(value = "meterId") Long meterId, @PathVariable(value = "year") int year) {
@@ -102,6 +103,7 @@ public class ConsumptionController {
 
     @GetMapping("/consumption/allconsumption/{meterId}/{year}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get total consumption by year", description = "Get total consumption by meter id and year")
     @ApiResponse(responseCode = "200", description = "Get total consumption by year")
     public ResponseEntity<String> getAllConsumptionByYear(@PathVariable(value = "meterId") Long meterId, @PathVariable(value = "year") int year) {

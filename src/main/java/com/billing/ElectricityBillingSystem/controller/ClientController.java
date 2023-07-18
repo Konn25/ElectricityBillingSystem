@@ -7,6 +7,7 @@ import com.billing.ElectricityBillingSystem.service.ClientService;
 import com.billing.ElectricityBillingSystem.service.MeterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,8 +21,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/v1")
@@ -70,6 +69,7 @@ public class ClientController {
 
     @GetMapping("/clientdata/{clientId}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get client's data", description = "Get client's important datat")
     @ApiResponse(responseCode = "200", description = "Get all client from database")
     public ResponseEntity<byte[]> getQRCode(@PathVariable("clientId") Long customerID) throws IOException {
@@ -80,11 +80,9 @@ public class ClientController {
     }
 
 
-
-
-
     @GetMapping("/clients")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get all registered client", description = "Return all registered client")
     @ApiResponse(responseCode = "200", description = "Get all client from database")
     public List<Client> getAllClient(){
@@ -93,6 +91,7 @@ public class ClientController {
 
     @GetMapping("/client/meter/{clientId}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get client's meter by client id.", description = "Return client's meter")
     @ApiResponse(responseCode = "200", description = "Get client's meter by client id.")
     public Meter getClientMeter(@PathVariable(name = "clientId") Long clientId){
@@ -101,6 +100,7 @@ public class ClientController {
 
     @GetMapping("/client/find/{clientId}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get client's data by client id.", description = "Return client's data")
     @ApiResponse(responseCode = "200", description = "Get client's data by client id")
     public Optional<Client> findClientById(@PathVariable(name = "clientId") Long clientId){

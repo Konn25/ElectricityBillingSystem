@@ -2,12 +2,11 @@ package com.billing.ElectricityBillingSystem.controller;
 
 
 import com.billing.ElectricityBillingSystem.dto.PaymentDTO;
-import com.billing.ElectricityBillingSystem.jpa.ClientRepository;
 import com.billing.ElectricityBillingSystem.jpa.Payment;
-import com.billing.ElectricityBillingSystem.jpa.PaymentRepository;
 import com.billing.ElectricityBillingSystem.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -52,6 +51,7 @@ public class PaymentController {
 
     @GetMapping("/payment/all/{clientId}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get client all payments", description = "Get client all payments by client id ")
     @ApiResponse(responseCode = "200", description = "Get client all payments")
     public List<Payment> getClientAllPayment(@PathVariable(value = "clientId") Long clientId) {
@@ -60,6 +60,7 @@ public class PaymentController {
 
     @PostMapping("/payment/paying/{clientId}/{paymentId}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Pay client payment", description = "Pay client payment by client id and payment id ")
     @ApiResponse(responseCode = "200", description = "Pay client payment")
     public Payment clientPayingBill(@PathVariable(value = "clientId") Long clientId, @PathVariable(value = "paymentId") Long paymentId) {
@@ -68,6 +69,7 @@ public class PaymentController {
 
     @GetMapping("/payment/bill/paid/{clientId}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get client all paid bill", description = "Get client all paid bill by client id")
     @ApiResponse(responseCode = "200", description = "Get client all paid bill")
     public List<Payment> getClientAllPaidBill(@PathVariable(value = "clientId") Long clientId) {
@@ -76,6 +78,7 @@ public class PaymentController {
 
     @GetMapping("/payment/bill/notpaid/{clientId}")
     @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
     @Operation(summary = "Get client all not paid bill", description = "Get client all not paid bill by client id")
     @ApiResponse(responseCode = "200", description = "Get client all not paid bill")
     public List<Payment> getClientAllNotPaidBill(@PathVariable(value = "clientId") Long clientId) {
