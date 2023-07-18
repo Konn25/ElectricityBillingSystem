@@ -40,4 +40,10 @@ public class Client {
     @Column(name = "categoryId", nullable = false)
     int paymentCategoryId;
 
+    @Column(name = "email", nullable = false)
+    String email;
+
+    @Column(name = "password", nullable = false)
+    String password;
+
 }

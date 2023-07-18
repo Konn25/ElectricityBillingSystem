@@ -29,6 +29,10 @@ public class ClientDTO {
 
     int paymentCategoryId;
 
+    String email;
+
+    String password;
+
 
 
 }
