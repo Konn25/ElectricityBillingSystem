@@ -33,6 +33,11 @@ dependencies {
 	implementation 'org.apache.maven.plugins:maven-surefire-plugin:3.0.0'
 	implementation 'com.github.kenglxn.QRGen:javase:3.0.1'
 
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation  'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -45,7 +50,7 @@ tasks.named('test') {
 }
 
 test {
-	//useJUnitPlatform()
+	useJUnitPlatform()
 	finalizedBy jacocoTestReport // report is always generated after tests run
 }
 
