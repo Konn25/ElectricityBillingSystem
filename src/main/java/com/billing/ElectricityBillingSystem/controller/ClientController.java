@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200",allowCredentials="true" )
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
@@ -105,6 +106,16 @@ public class ClientController {
     @ApiResponse(responseCode = "200", description = "Get client's data by client id")
     public Optional<Client> findClientById(@PathVariable(name = "clientId") Long clientId){
         return clientService.findClientById(clientId);
+    }
+
+    @GetMapping("/client/data/{email}")
+    @ResponseBody
+    @SecurityRequirement(name = "bearerToken")
+    @Operation(summary = "Get client's data by client id.", description = "Return client's data")
+    @ApiResponse(responseCode = "200", description = "Get client's data by client id")
+    public Optional<Client> findClientByEmail(@PathVariable(name = "email") String email){
+        System.out.println("FOUND IT: "+clientService.findClientByEmail(email));
+        return clientService.findClientByEmail(email);
     }
 
 

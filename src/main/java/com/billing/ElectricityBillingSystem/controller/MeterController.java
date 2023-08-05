@@ -16,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/v1")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 @Tag(name = "Meter API", description = "The Meter API.")
 public class MeterController {

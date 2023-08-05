@@ -68,4 +68,9 @@ public class ClientService implements ClientServiceInterface {
 
         return clientRepository.save(getClient);
     }
+
+    @Override
+    public Optional<Client> findClientByEmail(String email) {
+        return clientRepository.findClientByEmail(email);
+    }
 }

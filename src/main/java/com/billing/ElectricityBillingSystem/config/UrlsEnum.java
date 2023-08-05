@@ -14,7 +14,9 @@ public enum UrlsEnum {
     ),
     NOT_LOGGED_IN("/v1/authenticate", "/v1/createclient", "/v1/paymentcategory/all",
             "/v1/paymentcategory/registration", "/v1/payment/register",
-            "/swagger-ui/**", "/v3/api-docs/**","/v2/api-docs/**", "/swagger-resources/**");
+            "/swagger-ui/**", "/v3/api-docs/**","/v2/api-docs/**", "/swagger-resources/**"),
+
+    TEST("/v1/authenticate");
 
     private final String[] urls;
 

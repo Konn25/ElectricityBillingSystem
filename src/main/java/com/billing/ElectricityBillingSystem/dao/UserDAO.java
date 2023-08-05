@@ -27,7 +27,7 @@ public class UserDAO {
         List<UserDetails> APP_USERS = getAllUsersFromDatabase();
 
         return APP_USERS.stream().filter(u -> u.getUsername().equals(email)).findFirst()
-                .orElseThrow(() -> new UsernameNotFoundException("No user was found"));
+                .orElseThrow(() ->  new UsernameNotFoundException("No user was found"));
     }
 
     public List<UserDetails> getAllUsersFromDatabase() {

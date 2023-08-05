@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 @Tag(name = "Payment API", description = "The Payment API.")
 public class PaymentController {

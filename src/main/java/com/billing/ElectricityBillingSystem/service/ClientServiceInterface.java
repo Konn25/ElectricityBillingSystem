@@ -20,4 +20,6 @@ public interface ClientServiceInterface {
 
     Client setClientMeter(Client client,Long meterId);
 
+    Optional<Client> findClientByEmail(String email);
+
 }
